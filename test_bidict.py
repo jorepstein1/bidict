@@ -62,5 +62,20 @@ class TestBiDictOne(unittest.TestCase):
         my_bidict = BiDict(one=1)
         self.assertEquals(my_bidict['one'], 1)
 
+    def test_equals(self):
+        real_dict = {'one': 1, 'two': 2}
+        my_bidict = BiDict()
+        my_bidict['one'] = 1
+        my_bidict['two'] = 2
+
+        self.assertEquals(my_bidict, real_dict)
+
+        my_bidict = BiDict(real_dict)
+        self.assertEquals(my_bidict, real_dict)
+
+        my_bidict = BiDict()
+        my_bidict.update(real_dict)
+        self.assertEquals(my_bidict, real_dict)
+
 if __name__ == '__main__':
     unittest.main()

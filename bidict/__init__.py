@@ -2,8 +2,15 @@ from collections import UserDict
 
 
 class BiDict(UserDict):
+    """BiDict is a bi-directional dictionary class.
+        It extends collections.UserDict - a wrapper class 
+    designed to make subclassing the built-in dict class easier.
+        BiDict works with same functionality as dict.
+    """
 
     def __init__(self, *args, **kwargs):
+        """Initialization based on UserDict initialization.
+        Supports initializing an empty BiDict or initializing with given key:value pairs"""
         self.data_fw = {}  # dictionary containing dict["key"] = value
         self.data_rv = {}  # dictionary containing dict["value"] = key
 
@@ -35,11 +42,13 @@ class BiDict(UserDict):
         raise KeyError(key)
 
     def get_key(self, value):
+        """Returns a list of keys with value. Raises ValueKeyError if value is not in instance"""
         if value in self.data_rv:
             return self.data_rv[value]
         raise self.ValueKeyError(value)
 
     def __delitem__(self, key):
+        """Deletes entry from instance."""
         value = self.data_fw[key]
         keys_with_value = self.data_rv[value]
         keys_with_value.remove(key)
@@ -51,6 +60,9 @@ class BiDict(UserDict):
     def __iter__(self):
         return iter(self.data_fw)
 
+    def iter_values(self):
+        return iter(self.data_rv)
+
     def __contains__(self, key):
         return key in self.data_fw
 
@@ -58,8 +70,8 @@ class BiDict(UserDict):
         return value in self.data_rv
 
     def __repr__(self):
-        return "{0}:\n{1}\n{2}".format(repr(type(self)), repr(self.data_fw), repr(self.data_rv))
+        return "{0}:\n{1}".format(repr(type(self)), repr(self.data_fw))
 
     class ValueKeyError(KeyError):
-        """Raise when a value cannot be found when an attempt
-            is made to retrieve key from value """
+        """Raise when a value cannot be found during an attempt
+            to retrieve key from value """

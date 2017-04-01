@@ -10,7 +10,7 @@ class TestBiDictOne(unittest.TestCase):
 
         self.assertTrue('one' in my_bidict)
         self.assertEqual(my_bidict['one'], 1)
-        self.assertEqual(my_bidict.get_key(1), 'one')
+        self.assertTrue('one' in my_bidict.get_key(1))
         self.assertEqual(len(my_bidict), 1)
 
         del my_bidict['one']
@@ -26,21 +26,31 @@ class TestBiDictOne(unittest.TestCase):
         for key in my_bidict:
             my_bidict_value = my_bidict[key]
             self.assertEqual(my_bidict_value, real_dict[key])
-            self.assertEqual(my_bidict.get_key(my_bidict_value), key)
+            self.assertTrue(key in my_bidict.get_key(my_bidict_value))
 
     def test_duplicate_value(self):
         my_bidict = BiDict()
-        my_bidict['key1'] = 1
 
-        my_bidict['key1'] = 2
-        self.assertEqual(my_bidict['key1'], 2)
+        my_bidict['key'] = 1
+        my_bidict['key'] = 2
+        self.assertEqual(my_bidict['key'], 2)
 
-        my_bidict['key1'] = 'key1'
-        self.assertEqual(my_bidict['key1'], my_bidict.get_key('key1'))
+        my_bidict['key'] = 'key'
+        self.assertTrue(my_bidict['key'] in my_bidict.get_key('key'))
 
-        my_bidict['key1'] = 1
-        with self.assertRaises(BiDict.DuplicateValueError):
-            my_bidict['key2'] = 1
+        for i in range(10):
+            key = 'key' + str(i)
+            my_bidict[key] = 1
+
+        keys = my_bidict.get_key(1)
+        for i in range(10):
+            key = 'key' + str(i)
+            self.assertTrue(key in keys)
+
+        key = 'key1'
+        del my_bidict[key]
+        keys = my_bidict.get_key(1)
+        self.assertFalse(key in keys)
 
 if __name__ == '__main__':
     unittest.main()

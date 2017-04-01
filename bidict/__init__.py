@@ -3,9 +3,17 @@ from collections import UserDict
 
 class BiDict(UserDict):
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         self.data_fw = {}  # dictionary containing dict["key"] = value
         self.data_rv = {}  # dictionary containing dict["value"] = key
+
+        if len(args) > 1:
+            raise TypeError('expected at most 1 argument, got {0}'.format(len(args)))
+        if args:
+            initial_dict = args[0]
+            self.update(initial_dict)
+        if len(kwargs):
+            self.update(kwargs)
 
     def __len__(self):
         return len(self.data_fw)

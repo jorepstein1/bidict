@@ -52,5 +52,15 @@ class TestBiDictOne(unittest.TestCase):
         keys = my_bidict.get_key(1)
         self.assertFalse(key in keys)
 
+    def test_initialize_with_values(self):
+        real_dict = {'one': 1, 'two': 2}
+        my_bidict = BiDict(real_dict)
+
+        self.assertEquals(my_bidict['one'], 1)
+        self.assertTrue('two' in my_bidict.get_key(2))
+
+        my_bidict = BiDict(one=1)
+        self.assertEquals(my_bidict['one'], 1)
+
 if __name__ == '__main__':
     unittest.main()
